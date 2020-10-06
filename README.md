@@ -1,7 +1,9 @@
 # simple_cpp_shuffle_benchmark
 Simple benchmark to see how fast the standard C++ library can shuffle arrays.
 
-Requirements: Linux-like system with Make and GNU GCC.
+## Requirements
+
+Linux-like system with Make and GNU GCC.
 
 
 ## Usage
