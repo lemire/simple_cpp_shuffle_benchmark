@@ -3,6 +3,7 @@ Simple benchmark to see how fast the standard C++ library can shuffle arrays.
 
 Requirements: Linux-like system with Make and GNU GCC.
 
+
 Usage:
 
 ```
@@ -27,3 +28,5 @@ repeat = 10
 std::shuffle(testvalues, testvalues + size, g)              :  15834900 ns total,  15.83 ns per input key
 warning: average 17.528509 vs min 15.834900 (9.662027 percent) for arrays of size 1000000
 ```
+
+Reference: Daniel Lemire,  [Fast Random Integer Generation in an Interval](https://arxiv.org/abs/1805.10941), ACM Transactions on Modeling and Computer Simulation 29 (1), 2019
