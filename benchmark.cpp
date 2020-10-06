@@ -10,6 +10,10 @@
 #include <string.h>
 typedef std::chrono::high_resolution_clock Clock;
 
+// The code relies on quaint C code. It is not exactly
+// a textbook exercise in how to write nice C++, but
+// we do not care since the objective is one quick benchmark.
+
 #define AVG_TIME_NS(test, pre, repeat, size, verbose)                          \
   do {                                                                         \
     if (verbose)                                                               \
@@ -87,7 +91,8 @@ void ShuffleBenchmark32(size_t size, bool verbose) {
   if (verbose) {
     printf(" %s\n", __PRETTY_FUNCTION__);
     printf("Shuffling arrays of size %zu \n", size);
-    printf("Time reported in number of cycles per array element.\n");
+    printf("Uses a Mersenne Twister pseudo-random generator of 32-bit numbers\n");
+    printf("Time reported in number of ns per array element.\n");
   } else {
     printf("%zu ", size);
   }
@@ -104,7 +109,8 @@ void ShuffleBenchmark32(size_t size, bool verbose) {
   memcpy(pristinecopy, testvalues, sizeof(uint32_t) * size);
 
   std::random_device rd;
-  std::mt19937_64 g(rd());
+  // A Mersenne Twister pseudo-random generator of 32-bit numbers with a state size of 19937 bits.
+  std::mt19937 g(rd());
 
   AVG_TIME_NS(std::shuffle(testvalues, testvalues + size, g), , repeat, size,
               verbose);
@@ -119,6 +125,7 @@ void ShuffleBenchmark64(size_t size, bool verbose) {
   if (verbose) {
     printf(" %s\n", __PRETTY_FUNCTION__);
     printf("Shuffling arrays of size %zu \n", size);
+    printf("Uses a Mersenne Twister pseudo-random generator of 64-bit numbers\n");
     printf("Time reported in number of ns per array element.\n");
   } else {
     printf("%zu ", size);
@@ -134,7 +141,8 @@ void ShuffleBenchmark64(size_t size, bool verbose) {
   uint32_t *pristinecopy = (uint32_t *)malloc(size * sizeof(uint32_t));
   memcpy(pristinecopy, testvalues, sizeof(uint32_t) * size);
   std::random_device rd;
-  std::mt19937 g(rd());
+  // A Mersenne Twister pseudo-random generator of 64-bit numbers with a state size of 19937 bits.
+  std::mt19937_64 g(rd());
   AVG_TIME_NS(std::shuffle(testvalues, testvalues + size, g), , repeat, size,
               verbose);
   if (sortandcompare && (sortAndCompare(testvalues, pristinecopy, size) != 0))
@@ -146,6 +154,7 @@ void ShuffleBenchmark64(size_t size, bool verbose) {
 
 int main() {
   size_t N = 1000 * 1000;
+  printf("We benchmark arrays of 32-bit elements.\n\n");
   ShuffleBenchmark32(N, true);
   ShuffleBenchmark64(N, true);
 }
